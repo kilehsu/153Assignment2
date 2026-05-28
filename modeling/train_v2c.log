@@ -1,0 +1,19 @@
+Loading cached sequences and tokenizer...
+Loaded 368 cached sequences. Vocab size: 578
+
+Loading data splits...
+Train: 294, Val: 36, Test: 38
+
+Original training set: 294 sequences
+Augmenting training data with key-weighted transpositions...
+Augmented training set: 4998 sequences (17x original)
+
+Creating datasets...
+Train dataset size: 136441 windows
+Val dataset size: 1852 windows
+
+Instantiating model...
+Model parameter count: 933,442
+Using device: mps
+
+Starting training...

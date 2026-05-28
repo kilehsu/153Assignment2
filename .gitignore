@@ -1,0 +1,34 @@
+# Python env
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Claude worktrees / temp
+.claude/
+
+# Large binary outputs
+evaluation/*.wav
+evaluation/*.mid
+evaluation_task2/*.wav
+evaluation_task2/*.mid
+evaluation_task2/*.png
+
+# Model checkpoints
+modeling/checkpoints/*.pt
+modeling/checkpoints/*.pkl
+modeling/checkpoints/*.sf2
+modeling/checkpoints/*.sf3
+modeling/checkpoints/markov_transitions.json
+task1_artifacts/
+
+# Images (generated plots)
+images/
+
+# Large misc files
+module3.pdf
+*.sf2
+*.sf3

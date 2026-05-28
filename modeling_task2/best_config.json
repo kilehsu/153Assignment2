@@ -1,0 +1,6 @@
+{
+  "name": "All Three",
+  "penalty": 1.5,
+  "bias": 2.0,
+  "top_p": 0.95
+}

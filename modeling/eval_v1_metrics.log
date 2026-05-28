@@ -1,0 +1,74 @@
+
+======================================================================
+MUSIC METRICS EVALUATION: V1
+======================================================================
+
+Using device: mps
+Loading tokenizer (v1)...
+Vocab size: 322
+Loading splits and sequences...
+Test sequences: 38
+Loading Transformer model (v1)...
+Model loaded
+
+======================================================================
+GENERATING SAMPLES
+======================================================================
+
+Generating 20 samples from Transformer...
+Generated 20 Transformer samples
+Generating 20 samples from Markov...
+Generated 20 Markov samples
+Using 20 real Bach test sequences
+
+======================================================================
+DECODING SEQUENCES TO NOTES
+======================================================================
+
+Decoded Transformer: 20 samples
+Decoded Markov: 20 samples
+Decoded Real Bach: 20 samples
+
+======================================================================
+COMPUTING METRICS
+======================================================================
+
+Computing pitch metrics...
+Computing rhythm metrics...
+Computing sequence-level metrics...
+Computing KL divergences...
+
+Computing comparison ratios...
+
+======================================================================
+SAVING RESULTS
+======================================================================
+
+Saved metrics to /Users/kilehsu/153Assignment2/modeling/checkpoints/v1_music_metrics.json
+
+======================================================================
+METRIC COMPARISON TABLE
+======================================================================
+
+Metric                         Transformer     Markov          Real Bach      
+---------------------------------------------------------------------------
+Scale consistency              0.895           0.818           0.929          
+Note density (notes/beat)      1.076           1.118           1.103          
+Pitch class KL div             0.022           0.015           ---            
+Duration KL div                0.003           0.004           ---            
+Unique token ratio             0.287           0.487           0.255          
+
+======================================================================
+GENERATING PLOTS
+======================================================================
+
+Saved pitch class plot to /Users/kilehsu/153Assignment2/images/metrics_pitch_class_v1.png
+Saved duration plot to /Users/kilehsu/153Assignment2/images/metrics_duration_v1.png
+Saved summary plot to /Users/kilehsu/153Assignment2/images/metrics_summary_v1.png
+
+======================================================================
+EVALUATION COMPLETE
+======================================================================
+
+Results saved to: /Users/kilehsu/153Assignment2/modeling/checkpoints/v1_music_metrics.json
+Plots saved to: /Users/kilehsu/153Assignment2/images

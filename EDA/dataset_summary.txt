@@ -1,0 +1,11 @@
+============================================================
+BACH CHORALES DATASET SUMMARY
+============================================================
+
+Total Chorales: 368
+Total Notes: 86270
+Average Notes per Chorale: 234.4
+Min Notes per Chorale: 102
+Max Notes per Chorale: 980
+Median Notes per Chorale: 215.0
+Std Dev Notes per Chorale: 86.7

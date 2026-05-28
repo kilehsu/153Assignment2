@@ -1,0 +1,79 @@
+
+======================================================================
+MUSIC METRICS EVALUATION: V2
+======================================================================
+
+Using device: mps
+Loading tokenizer (v2)...
+Vocab size: 578
+Loading splits and sequences...
+Test sequences: 38
+Loading Transformer model (v2)...
+Model loaded
+
+======================================================================
+GENERATING SAMPLES
+======================================================================
+
+Generating 20 samples from Transformer...
+Generated 20 Transformer samples
+Generating 20 samples from Markov...
+Generated 20 Markov samples
+Using 20 real Bach test sequences
+
+======================================================================
+DECODING SEQUENCES TO NOTES
+======================================================================
+
+Decoded Transformer: 20 samples
+Decoded Markov: 20 samples
+Decoded Real Bach: 20 samples
+
+======================================================================
+COMPUTING METRICS
+======================================================================
+
+Computing pitch metrics...
+Computing rhythm metrics...
+Computing voice-leading metrics...
+Computing harmony metrics...
+Computing sequence-level metrics...
+Computing KL divergences...
+
+Computing comparison ratios...
+
+======================================================================
+SAVING RESULTS
+======================================================================
+
+Saved metrics to /Users/kilehsu/153Assignment2/modeling/checkpoints/v2_music_metrics.json
+
+======================================================================
+METRIC COMPARISON TABLE
+======================================================================
+
+Metric                         Transformer     Markov          Real Bach      
+---------------------------------------------------------------------------
+Scale consistency              0.907           0.685           0.933          
+Note density (notes/beat)      1.736           24.817          1.675          
+Pitch class KL div             0.051           0.205           ---            
+Duration KL div                0.048           1.495           ---            
+Avg voice step (semitones)     2.51            2.30            2.26           
+Leap ratio                     0.183           0.136           0.143          
+Consonance score               0.890           0.533           0.929          
+Unique token ratio             0.198           0.424           0.106          
+
+======================================================================
+GENERATING PLOTS
+======================================================================
+
+Saved pitch class plot to /Users/kilehsu/153Assignment2/images/metrics_pitch_class_v2.png
+Saved duration plot to /Users/kilehsu/153Assignment2/images/metrics_duration_v2.png
+Saved summary plot to /Users/kilehsu/153Assignment2/images/metrics_summary_v2.png
+
+======================================================================
+EVALUATION COMPLETE
+======================================================================
+
+Results saved to: /Users/kilehsu/153Assignment2/modeling/checkpoints/v2_music_metrics.json
+Plots saved to: /Users/kilehsu/153Assignment2/images

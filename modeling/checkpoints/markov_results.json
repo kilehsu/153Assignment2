@@ -1,0 +1,1 @@
+{"val_perplexity": 30.039224396321995, "test_perplexity": 26.35155905583978, "val_nll": 27934.557901838194, "test_nll": 29325.971976118566, "val_total_tokens": 8210, "test_total_tokens": 8964}

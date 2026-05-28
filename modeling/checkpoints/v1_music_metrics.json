@@ -1,0 +1,138 @@
+{
+  "version": "v1",
+  "sources": {
+    "transformer": {
+      "pitch_class_histogram": [
+        0.060651629072681706,
+        0.058646616541353384,
+        0.12832080200501253,
+        0.015288220551378446,
+        0.1511278195488722,
+        0.05137844611528822,
+        0.09849624060150376,
+        0.11228070175438597,
+        0.039598997493734335,
+        0.15288220551378445,
+        0.029072681704260653,
+        0.10225563909774436
+      ],
+      "scale_consistency": 0.8948686868686868,
+      "unique_pitches_per_sample": 25.6,
+      "pitch_range": 31.2,
+      "note_density": 1.1285608086717729,
+      "avg_note_duration": 0.9057891414141415,
+      "duration_histogram": [
+        0.019799498746867168,
+        0.37844611528822053,
+        0.5105263157894737,
+        0.06942355889724311,
+        0.02180451127819549,
+        0.0
+      ],
+      "avg_voice_step": null,
+      "leap_ratio": null,
+      "voice_crossing_ratio": null,
+      "consonance_score": null,
+      "parallel_fifth_ratio": null,
+      "avg_length": 201.0,
+      "early_end_ratio": 0.0,
+      "unique_token_ratio": 0.2875621890547264,
+      "pitch_class_kl_div": 0.02694547760868299,
+      "duration_kl_div": 0.0073175447089415604
+    },
+    "markov": {
+      "pitch_class_histogram": [
+        0.09408602150537634,
+        0.03763440860215054,
+        0.1490015360983103,
+        0.03917050691244239,
+        0.1152073732718894,
+        0.07949308755760369,
+        0.065284178187404,
+        0.11405529953917051,
+        0.037250384024577574,
+        0.1347926267281106,
+        0.05414746543778802,
+        0.07987711213517665
+      ],
+      "scale_consistency": 0.7781825361653525,
+      "unique_pitches_per_sample": 25.3,
+      "pitch_range": 31.05,
+      "note_density": 1.0458317160285326,
+      "avg_note_duration": 0.9715292321529365,
+      "duration_histogram": [
+        0.01881720430107527,
+        0.34831029185867896,
+        0.533026113671275,
+        0.08179723502304148,
+        0.017665130568356373,
+        0.00038402457757296467
+      ],
+      "avg_voice_step": null,
+      "leap_ratio": null,
+      "voice_crossing_ratio": null,
+      "consonance_score": null,
+      "parallel_fifth_ratio": null,
+      "avg_length": 131.8,
+      "early_end_ratio": 0.45,
+      "unique_token_ratio": 0.500349867323381,
+      "pitch_class_kl_div": 0.03258079296267127,
+      "duration_kl_div": 0.001318988352842387
+    },
+    "real_bach": {
+      "pitch_class_histogram": [
+        0.08978583196046129,
+        0.04303953871499176,
+        0.14888797364085668,
+        0.015032948929159802,
+        0.12397034596375618,
+        0.06054365733113674,
+        0.0815485996705107,
+        0.12417627677100494,
+        0.018533772652388796,
+        0.1429159802306425,
+        0.042009884678747944,
+        0.10955518945634267
+      ],
+      "scale_consistency": 0.9288251200837678,
+      "unique_pitches_per_sample": 27.25,
+      "pitch_range": 34.5,
+      "note_density": 1.102774365677308,
+      "avg_note_duration": 0.9561232361595244,
+      "duration_histogram": [
+        0.016268533772652388,
+        0.33525535420098845,
+        0.5440691927512356,
+        0.08401976935749589,
+        0.01873970345963756,
+        0.0016474464579901153
+      ],
+      "avg_voice_step": null,
+      "leap_ratio": null,
+      "voice_crossing_ratio": null,
+      "consonance_score": null,
+      "parallel_fifth_ratio": null,
+      "avg_length": 244.8,
+      "early_end_ratio": 0.0,
+      "unique_token_ratio": 0.2550146015974126,
+      "pitch_class_kl_div": null,
+      "duration_kl_div": null
+    }
+  },
+  "comparisons": {
+    "transformer_vs_real": {
+      "pitch_class_kl_div": 0.02694547760868299,
+      "duration_kl_div": 0.0073175447089415604,
+      "scale_consistency_ratio": 0.9634415214652909,
+      "consonance_ratio": null,
+      "avg_voice_step_ratio": null
+    },
+    "markov_vs_real": {
+      "pitch_class_kl_div": 0.03258079296267127,
+      "duration_kl_div": 0.001318988352842387,
+      "scale_consistency_ratio": 0.8378138352838376,
+      "consonance_ratio": null,
+      "avg_voice_step_ratio": null
+    }
+  }
+}

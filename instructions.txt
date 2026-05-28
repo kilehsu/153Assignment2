@@ -1,0 +1,67 @@
+General guidelines
+
+This assignment is due in early week 10 with peer grades due during week 11. Final deadlines are as posted on gradescope. Note the Tuesday (rather than Sunday) deadline since (a) everyone will need adequate time to perform peer grading during week 11; and (b) I hope some people will perform their compositions in class!
+Given that assignments must be distributed to peer graders, late submissions will not be accepted (or accepted for at most partial credit); there will be a late window though this is for students with an applicable OSD accommodation and not generally available to others. 
+Peer assignments will be available once the above late window closes (plus 12-24 hours for me to compile submissions and run various peer assignment scripts)
+Assignments can be completed in groups of up to 4, though may also be completed individually
+The assignment will be peer-graded. You are welcome to “blind” your submission (to the extent possible) though you are not required to. As such, there will be no difference in grading based on the group size.
+You are required to upload:
+A jupyter notebook, exported as html. It should be “clean”, documented, and readable as-is; peer graders should not be expected to execute your code
+A ~20-minute presentation, uploaded as a video file via a google drive link
+Generated music (.mid or .mp3 files)
+A peer grading report (due ~1 week later)
+The above components are worth 20% of your grade. The notebook and presentation aren’t graded separately, rather, peer graders should be expected to watch your presentation while following along with your code. The exact format is up to you, though I recommend a combination of slides and code walkthrough. The specific graded components are described below.
+Overall description
+
+Task: make some beautiful music!
+
+Choose any two of the following tasks:
+
+Symbolic, unconditioned generation: I.e., train a model that learns a music distribution p(x) (presumably based on some training set) and samples from that distribution. A Markov chain (Module 3) is an example of such a model (though you should generally avoid models already implemented in homeworks unless you can significantly extend them).
+Symbolic, conditioned generation: Similar to Option 1, except that generation is done conditionally, i.e., given some input. Example tasks include
+harmonization (generate notes or chords following a melody)
+or vice-versa (generate a melody which follows some chords)
+music transcription (i.e., estimate the sequence of notes played in a waveform or spectrogram)
+(others are also fine as long as the output is symbolic)
+
+For examples of Options 1 and 2, see Module 3; for examples of Options 3 and 4, see Module 4. Note that you are not required to implement models “from scratch”: you can use code from research papers (with acknowledgement), though you are expected to produce a complete pipeline, e.g. you should fit your own model weights using a training set, rather than running a binary or loading somebody else’s weight files.
+
+Rubric and grading
+
+The assignment is worth 20 marks. The grade breakdown is as follows:
+
+Two tasks (above): 8 marks each
+Participate in peer grading (grade four assignments): 4 marks
+
+Graders should grade each of the four parts (for each of the two tasks) roughly according to the following rubric:
+
+0: This component was not covered
+0.5: This component was covered, but appears to contain errors, or cannot be easily understood, or the presentation does not seem to match the code, or the presentation seems to be automatically generated
+1: This component was covered, but only superficially, i.e., it has some of the right components, and appears correct, but is missing key elements or comparisons that would be expected from a complete analysis
+1.5: This submission is more-or-less minimally acceptable: e.g. a minimal set of essential elements are covered, though maybe not discussed in detail
+1.75: The code and presentation seems feature-complete: all the results “make sense”, or any negative results are adequately explained; the presentation explains the tradeoffs between different metrics and goals, is clear and easy to follow, etc. This should probably be the most common grade.
+2: The code and presentation go above-and-beyond in some way, e.g. it might be particularly thorough, try an interesting or new approach, or shows excellence in some other way
+
+Graders will also be asked to assess musical quality (or really “interestingness”): this component is not graded, I just want to be able to find good examples to share with everyone.
+
+Your presentation should focus on the following four sections (duplicated for each of your two tasks):
+
+(start the presentation by introducing your task)
+Exploratory analysis, data collection, pre-processing, and discussion: 
+Context: Where does your dataset come from? What is it for, how was it collected, etc.?
+Discussion: Report how you processed the data (or how it was already processed); 
+Code: Support your analysis with tables, plots, statistics, etc.
+Modeling:
+Context: How do you formulate your task as an ML problem, e.g. what are the inputs, outputs, and what is being optimized? What models are appropriate for the task?
+Discussion: Discuss the advantages and disadvantages of different modeling approaches (complexity, efficiency, challenges in implementation, etc.)
+Code: Walk through your code, explaining architectural choices and any implementation details.
+Evaluation: 
+Context: How should your task be evaluated? What should be the properties of a “good” output? What is the relationship between the objective being optimized by your model (e.g. perplexity) and musical properties (e.g. does it follow harmonic “rules”?) versus subjective properties?
+Discussion: What are some baselines (trivial or otherwise) for your task? How do you demonstrate that your method is better than these trivial methods?
+Code: Walk through the implementation of your evaluation protocol, and support your evaluation with tables, plots, statistics, etc.
+Discussion of related work:
+How has this dataset (or similar datasets) been used before?
+How has prior work approached the same (or similar) tasks?
+How do your results match or differ from what has been reported in related work?
+(you can put this section at the beginning if you’d prefer)
+I would suggest playing your music at the end of the presentation just in case graders have trouble with your files; this shouldn’t count against the 20 minute requirement.

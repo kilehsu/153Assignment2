@@ -1,0 +1,45 @@
+Loading cached sequences and tokenizer...
+Loaded 368 cached sequences. Vocab size: 578
+
+Loading data splits...
+Train: 294, Val: 36, Test: 38
+
+Extracting training sequences...
+Original training set: 294 sequences
+Augmenting training data with transpositions (±5 semitones)...
+Augmented training set: 3234 sequences (was 294)
+
+Creating datasets...
+Train dataset size: 88280 windows
+Val dataset size: 1852 windows
+
+Instantiating model...
+Model parameter count: 933,442
+Using device: mps
+
+Starting training...
+Epoch 1/40 | Train Loss: 4.1883 | Val Loss: 1.3875 | LR: 0.0004999
+Epoch 2/40 | Train Loss: 1.2461 | Val Loss: 1.0266 | LR: 0.0004987
+Epoch 3/40 | Train Loss: 0.9619 | Val Loss: 0.7645 | LR: 0.0004959
+Epoch 4/40 | Train Loss: 0.7722 | Val Loss: 0.6148 | LR: 0.0004915
+Epoch 5/40 | Train Loss: 0.6632 | Val Loss: 0.5546 | LR: 0.0004855
+Epoch 6/40 | Train Loss: 0.6022 | Val Loss: 0.5147 | LR: 0.0004781
+Epoch 7/40 | Train Loss: 0.5596 | Val Loss: 0.4823 | LR: 0.0004692
+Epoch 8/40 | Train Loss: 0.5277 | Val Loss: 0.4617 | LR: 0.0004588
+Epoch 9/40 | Train Loss: 0.5028 | Val Loss: 0.4469 | LR: 0.0004472
+Epoch 10/40 | Train Loss: 0.4835 | Val Loss: 0.4333 | LR: 0.0004343
+Epoch 11/40 | Train Loss: 0.4679 | Val Loss: 0.4265 | LR: 0.0004202
+Epoch 12/40 | Train Loss: 0.4554 | Val Loss: 0.4197 | LR: 0.0004050
+Epoch 13/40 | Train Loss: 0.4448 | Val Loss: 0.4143 | LR: 0.0003889
+Epoch 14/40 | Train Loss: 0.4358 | Val Loss: 0.4116 | LR: 0.0003718
+Epoch 15/40 | Train Loss: 0.4281 | Val Loss: 0.4077 | LR: 0.0003540
+Epoch 16/40 | Train Loss: 0.4213 | Val Loss: 0.4043 | LR: 0.0003355
+Epoch 17/40 | Train Loss: 0.4153 | Val Loss: 0.4018 | LR: 0.0003164
+Epoch 18/40 | Train Loss: 0.4098 | Val Loss: 0.3994 | LR: 0.0002970
+Epoch 19/40 | Train Loss: 0.4050 | Val Loss: 0.3991 | LR: 0.0002772
+Epoch 20/40 | Train Loss: 0.4005 | Val Loss: 0.3981 | LR: 0.0002572
+Epoch 21/40 | Train Loss: 0.3965 | Val Loss: 0.3970 | LR: 0.0002373
+Epoch 22/40 | Train Loss: 0.3928 | Val Loss: 0.3966 | LR: 0.0002173
+Epoch 23/40 | Train Loss: 0.3895 | Val Loss: 0.3947 | LR: 0.0001976
+Epoch 24/40 | Train Loss: 0.3866 | Val Loss: 0.3925 | LR: 0.0001783
+Epoch 25/40 | Train Loss: 0.3837 | Val Loss: 0.3939 | LR: 0.0001594

@@ -1,0 +1,21 @@
+Loading cached encoded sequences...
+Loaded 368 cached sequences. Vocab size: 578
+
+Loading existing splits...
+Train: 294, Val: 36, Test: 38
+
+Creating datasets...
+Train dataset size: 16022 windows
+Val dataset size: 1852 windows
+
+Instantiating model...
+Model parameter count: 5,018,690
+Using device: mps
+
+Starting training...
+Epoch 1/25 | Train Loss: 6.0300 | Val Loss: 1.6190
+Epoch 2/25 | Train Loss: 1.3800 | Val Loss: 1.0689
+Epoch 3/25 | Train Loss: 0.8557 | Val Loss: 0.6982
+Epoch 4/25 | Train Loss: 0.5753 | Val Loss: 0.6038
+Epoch 5/25 | Train Loss: 0.4130 | Val Loss: 0.6419
+Epoch 6/25 | Train Loss: 0.2844 | Val Loss: 0.7623
