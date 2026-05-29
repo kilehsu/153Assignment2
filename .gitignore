@@ -32,3 +32,8 @@ module3.pdf
 *.sf2
 *.sf3
 data/
+evaluation_task2/*.mid
+evaluation_task2/*.wav
+modeling_task2/pop909_cache.pkl
+modeling_task2/*.pt
+modeling_task2/__pycache__/
