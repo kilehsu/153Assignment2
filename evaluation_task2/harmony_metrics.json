@@ -1,21 +1,23 @@
 {
-  "num_test_chorales": 10,
-  "our_model": {
-    "scale_consistency": 92.01619969295413,
-    "voice_crossing_rate": 1.8426314426314427,
-    "parallel_5ths_rate": 0.5718954248366013,
-    "pitch_kl_divergence": 2.372516584142357
+  "Our Model": {
+    "Scale Consistency (%)": 61.52,
+    "Note Density Ratio": 0.247,
+    "Pitch Range Coverage (%)": 91.1
   },
-  "random_baseline": {
-    "scale_consistency": 69.91175797747464,
-    "voice_crossing_rate": 96.25809672380629,
-    "parallel_5ths_rate": 0.0,
-    "pitch_kl_divergence": 0.104146569617215
+  "Random Baseline": {
+    "Scale Consistency (%)": 100.0,
+    "Note Density Ratio": 0.5,
+    "Pitch Range Coverage (%)": 96.22
   },
-  "real_bach": {
-    "scale_consistency": 92.73733633466745,
-    "voice_crossing_rate": 1.397142617730853,
-    "parallel_5ths_rate": 0.1724137931034483,
-    "pitch_kl_divergence": 1.6253206769860156
+  "_meta": {
+    "songs_evaluated": [
+      "001",
+      "042",
+      "100",
+      "150",
+      "200",
+      "300"
+    ],
+    "n": 6
   }
 }

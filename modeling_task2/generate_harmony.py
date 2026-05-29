@@ -86,60 +86,82 @@ def generate_for_song(song_id, data_dir, checkpoint_path, output_dir, use_dummy=
 
     print(f"Melody shape: {melody_seq.shape}, Piano shape: {piano_seq.shape}")
 
+    # Find first window that has substantial melody content (not all REST=128)
+    # REST tokens are 128; find first slot with a real note
+    window_len = 64
+    first_note_slot = 0
+    for i, pitch in enumerate(melody_seq):
+        if pitch != 128:
+            first_note_slot = i
+            break
+
+    # Start the window at the first real melody note
+    window_start = first_note_slot
+    window_end = window_start + window_len
+
+    if window_end > len(melody_seq):
+        # Fall back: use the last available window
+        window_start = max(0, len(melody_seq) - window_len)
+        window_end = window_start + window_len
+
+    print(f"Using window [{window_start}, {window_end}) — first_note_slot={first_note_slot}")
+
     # Convert to tensor
-    if len(melody_seq) >= 64:
-        melody_tensor = torch.LongTensor(melody_seq[:64]).unsqueeze(0)  # (1, 64)
+    if len(melody_seq) >= window_end:
+        melody_window = melody_seq[window_start:window_end]
+        melody_tensor = torch.LongTensor(melody_window).unsqueeze(0)  # (1, 64)
     else:
         # Pad
-        pad_len = 64 - len(melody_seq)
-        padded = np.pad(melody_seq, (0, pad_len), constant_values=128)
+        melody_window = melody_seq[window_start:]
+        pad_len = window_len - len(melody_window)
+        padded = np.pad(melody_window, (0, pad_len), constant_values=128)
         melody_tensor = torch.LongTensor(padded).unsqueeze(0)
 
-    # Generate
-    if model is not None:
-        with torch.no_grad():
-            generated_piano = model.generate(melody_tensor, max_len=64, greedy=True)
-        generated_piano = generated_piano[0].numpy()  # (64, 4)
-    else:
-        # Dummy output: random chords
-        generated_piano = np.random.randint(36, 84, size=(64, 4))
-
-    print(f"Generated piano shape: {generated_piano.shape}")
-
-    # Reconstruct MIDI
     # Load original to get timing info
     pm_original = pretty_midi.PrettyMIDI(midi_path)
-    tempo = pm_original.estimate_tempo()
-    if tempo < 40:
+
+    # Use actual MIDI tempo track — estimate_tempo() is unreliable for pop
+    _, tempos = pm_original.get_tempo_changes()
+    tempo = float(tempos[0]) if len(tempos) > 0 else 120.0
+    if tempo < 40 or tempo > 300:
         tempo = 120.0
+    slot_duration = 60.0 / (tempo * 4.0)
+    print(f"Tempo: {tempo:.1f} BPM  →  slot: {slot_duration*1000:.1f} ms")
 
-    # Create new MIDI with melody + generated piano
+    # Generate piano for the FULL song in non-overlapping windows
+    total_slots = len(melody_seq)
+    all_generated = np.zeros((total_slots, 4), dtype=np.int64)
+    if model is not None:
+        for win_start in range(0, total_slots, window_len):
+            chunk = melody_seq[win_start:win_start + window_len]
+            actual_len = len(chunk)
+            if actual_len < window_len:
+                chunk = np.pad(chunk, (0, window_len - actual_len), constant_values=128)
+            mel_t = torch.LongTensor(chunk).unsqueeze(0)
+            with torch.no_grad():
+                gen = model.generate(mel_t, max_len=window_len, greedy=False)
+            all_generated[win_start:win_start + actual_len] = gen[0].numpy()[:actual_len]
+    else:
+        all_generated = np.random.randint(36, 84, size=(total_slots, 4))
+
+    print(f"Generated {total_slots} slots → {total_slots * slot_duration:.1f}s")
+
+    # Build output MIDI
     pm_generated = pretty_midi.PrettyMIDI(initial_tempo=tempo)
+    pm_generated.instruments.append(pm_original.instruments[0])  # copy melody
 
-    # Add melody track (copy from original)
-    melody_track = pm_original.instruments[0]
-    pm_generated.instruments.append(melody_track)
-
-    # Convert generated piano sequence back to MIDI notes
-    def dequantize_to_sec(idx_16th, tempo):
-        """Convert 16th-note index back to seconds."""
-        beat_position = idx_16th / 4.0
-        return beat_position * (60.0 / tempo)
-
-    piano_track = pretty_midi.Instrument(program=0, is_drum=False)
-
-    for idx_16th, chord in enumerate(generated_piano):
-        # Skip if all zeros (rest)
-        if np.all(chord == 0):
-            continue
-
-        start_sec = dequantize_to_sec(idx_16th, tempo)
-        end_sec = dequantize_to_sec(idx_16th + 1, tempo)
-
+    piano_track = pretty_midi.Instrument(program=0, is_drum=False, name='Generated Piano')
+    for slot_idx, chord in enumerate(all_generated):
+        start_sec = slot_idx * slot_duration
+        end_sec   = start_sec + slot_duration
+        seen = set()
         for pitch in chord:
-            if pitch > 0 and pitch < 129:
-                note = pretty_midi.Note(velocity=80, pitch=int(pitch), start=start_sec, end=end_sec)
-                piano_track.notes.append(note)
+            pitch = int(pitch)
+            if pitch <= 0 or pitch >= 128 or pitch in seen:
+                continue
+            seen.add(pitch)
+            piano_track.notes.append(
+                pretty_midi.Note(velocity=80, pitch=pitch, start=start_sec, end=end_sec))
 
     pm_generated.instruments.append(piano_track)
 
@@ -154,29 +176,24 @@ def generate_for_song(song_id, data_dir, checkpoint_path, output_dir, use_dummy=
     pm_original_copy.write(original_midi_path)
     print(f"Saved original MIDI: {original_midi_path}")
 
-    # Try to convert to WAV
+    # Convert to WAV using pretty_midi (no subprocess, no audio playback)
     soundfont_path = '/Users/kilehsu/153Assignment2/modeling/checkpoints/MuseScore_General.sf3'
     if os.path.exists(soundfont_path):
         try:
-            import subprocess
-            # Use fluidsynth to convert
-            wav_path = os.path.join(output_dir, f'harmony_{song_id.zfill(3)}.wav')
-            subprocess.run([
-                'fluidsynth', '-ni', soundfont_path,
-                generated_midi_path, '-F', wav_path
-            ], check=True, capture_output=True)
-            print(f"Saved generated WAV: {wav_path}")
-
-            wav_original_path = os.path.join(output_dir, f'harmony_{song_id.zfill(3)}_original.wav')
-            subprocess.run([
-                'fluidsynth', '-ni', soundfont_path,
-                original_midi_path, '-F', wav_original_path
-            ], check=True, capture_output=True)
-            print(f"Saved original WAV: {wav_original_path}")
+            import soundfile as sf_audio
+            for mid_path, wav_label in [
+                (generated_midi_path, f'harmony_{song_id.zfill(3)}.wav'),
+                (original_midi_path,  f'harmony_{song_id.zfill(3)}_original.wav'),
+            ]:
+                wav_path = os.path.join(output_dir, wav_label)
+                pm_tmp = pretty_midi.PrettyMIDI(mid_path)
+                audio = pm_tmp.fluidsynth(fs=44100, sf2_path=soundfont_path)
+                sf_audio.write(wav_path, audio, 44100)
+                print(f"Saved WAV: {wav_path}")
         except Exception as e:
             print(f"WAV conversion skipped: {e}")
     else:
-        print(f"Soundfont not found: {soundfont_path}")
+        print(f"Soundfont not found at {soundfont_path} — skipping WAV")
 
     return True
 
