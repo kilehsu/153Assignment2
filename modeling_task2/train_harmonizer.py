@@ -69,7 +69,7 @@ def validate(model, val_loader, device):
             melody = melody.to(device)
             piano = piano.to(device)
 
-            logits, targets = model(melody, piano, teacher_forcing_ratio=0.0)
+            logits, targets = model(melody, piano, teacher_forcing_ratio=1.0)
 
             logits_reshaped = logits.view(-1, 4, 129)
             targets_reshaped = targets.view(-1, 4)
