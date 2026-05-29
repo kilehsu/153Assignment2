@@ -1,3 +1,6 @@
+# macOS
+.DS_Store
+
 # Python env
 .venv/
 __pycache__/
@@ -17,13 +20,9 @@ evaluation_task2/*.wav
 evaluation_task2/*.mid
 evaluation_task2/*.png
 
-# Model checkpoints
-modeling/checkpoints/*.pt
-modeling/checkpoints/*.pkl
-modeling/checkpoints/*.sf2
-modeling/checkpoints/*.sf3
-modeling/checkpoints/markov_transitions.json
-task1_artifacts/
+# Model checkpoints (kept so friends don't need to retrain)
+# modeling/checkpoints/*.pt  -- tracked intentionally
+# task1_artifacts/            -- tracked intentionally
 
 # Images (generated plots)
 images/
