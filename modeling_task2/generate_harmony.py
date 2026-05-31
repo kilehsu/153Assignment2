@@ -176,22 +176,27 @@ def generate_for_song(song_id, data_dir, checkpoint_path, output_dir, use_dummy=
     pm_original_copy.write(original_midi_path)
     print(f"Saved original MIDI: {original_midi_path}")
 
-    # Convert to WAV using pretty_midi (no subprocess, no audio playback)
-    soundfont_path = '/Users/kilehsu/153Assignment2/modeling/checkpoints/MuseScore_General.sf3'
+    # Convert to WAV via the fluidsynth CLI. We avoid pretty_midi.fluidsynth()/
+    # pyfluidsynth because the installed libfluidsynth is x86_64 while Python is arm64
+    # (dlopen fails). The CLI binary runs under Rosetta; '-a file' renders to disk
+    # silently (no speaker output).
+    import shutil, subprocess
+    soundfont_path = 'modeling/checkpoints/MuseScore_General.sf3'
+    fs_bin = shutil.which('fluidsynth') or '/usr/local/bin/fluidsynth'
     if os.path.exists(soundfont_path):
-        try:
-            import soundfile as sf_audio
-            for mid_path, wav_label in [
-                (generated_midi_path, f'harmony_{song_id.zfill(3)}.wav'),
-                (original_midi_path,  f'harmony_{song_id.zfill(3)}_original.wav'),
-            ]:
-                wav_path = os.path.join(output_dir, wav_label)
-                pm_tmp = pretty_midi.PrettyMIDI(mid_path)
-                audio = pm_tmp.fluidsynth(fs=44100, sf2_path=soundfont_path)
-                sf_audio.write(wav_path, audio, 44100)
+        for mid_path, wav_label in [
+            (generated_midi_path, f'harmony_{song_id.zfill(3)}.wav'),
+            (original_midi_path,  f'harmony_{song_id.zfill(3)}_original.wav'),
+        ]:
+            wav_path = os.path.join(output_dir, wav_label)
+            subprocess.run(
+                [fs_bin, '-ni', '-F', wav_path, '-r', '44100',
+                 soundfont_path, mid_path],
+                capture_output=True, timeout=180)
+            if os.path.exists(wav_path) and os.path.getsize(wav_path) > 1000:
                 print(f"Saved WAV: {wav_path}")
-        except Exception as e:
-            print(f"WAV conversion skipped: {e}")
+            else:
+                print(f"WAV conversion failed for {mid_path}")
     else:
         print(f"Soundfont not found at {soundfont_path} — skipping WAV")
 
@@ -210,9 +215,9 @@ def main():
     if args.checkpoint is None:
         args.checkpoint = os.path.join(os.path.dirname(__file__), 'harmonizer_best.pt')
     if args.output is None:
-        args.output = '/Users/kilehsu/153Assignment2/evaluation_task2'
+        args.output = 'evaluation_task2'
 
-    data_dir = '/Users/kilehsu/153Assignment2/data/POP909/POP909'
+    data_dir = 'data/POP909/POP909'
 
     success = generate_for_song(
         args.song, data_dir, args.checkpoint, args.output, use_dummy=args.dummy

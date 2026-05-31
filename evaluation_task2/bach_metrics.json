@@ -1,0 +1,20 @@
+{
+  "Our Model (prefix-conditioning)": {
+    "Scale Consistency (%)": 93.93,
+    "Voice Crossing (%)": 2.67,
+    "Parallel 5ths (%)": 1.01
+  },
+  "Random In-Key Baseline": {
+    "Scale Consistency (%)": 95.33,
+    "Voice Crossing (%)": 51.07,
+    "Parallel 5ths (%)": 0.95
+  },
+  "_meta": {
+    "n_chorales": 3,
+    "test_indices": [
+      257,
+      126,
+      211
+    ]
+  }
+}

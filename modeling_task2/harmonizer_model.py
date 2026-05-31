@@ -49,8 +49,8 @@ class BahdanauAttention(nn.Module):
 
     def __init__(self, hidden_dim, encoder_hidden_dim):
         super().__init__()
-        self.query_proj = nn.Linear(hidden_dim, encoder_hidden_dim)
-        self.key_proj = nn.Linear(encoder_hidden_dim, encoder_hidden_dim)
+        self.q = nn.Linear(hidden_dim, encoder_hidden_dim)
+        self.k = nn.Linear(encoder_hidden_dim, encoder_hidden_dim)
         self.v = nn.Linear(encoder_hidden_dim, 1)
 
     def forward(self, decoder_hidden, encoder_outputs):
@@ -63,20 +63,14 @@ class BahdanauAttention(nn.Module):
             context: (batch_size, encoder_hidden_dim)
             attention_weights: (batch_size, seq_len)
         """
-        # Expand decoder hidden for broadcasting
-        query = self.query_proj(decoder_hidden).unsqueeze(1)  # (batch, 1, encoder_hidden)
-        keys = self.key_proj(encoder_outputs)  # (batch, seq_len, encoder_hidden)
-
-        # Additive attention
+        query = self.q(decoder_hidden).unsqueeze(1)  # (batch, 1, encoder_hidden)
+        keys = self.k(encoder_outputs)               # (batch, seq_len, encoder_hidden)
         scores = self.v(torch.tanh(query + keys)).squeeze(-1)  # (batch, seq_len)
         attention_weights = F.softmax(scores, dim=1)
-
-        # Weighted sum of encoder outputs
         context = torch.bmm(
             attention_weights.unsqueeze(1),
             encoder_outputs
         ).squeeze(1)  # (batch, encoder_hidden_dim)
-
         return context, attention_weights
 
 

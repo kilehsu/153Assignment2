@@ -25,9 +25,9 @@ script_dir = Path(__file__).parent
 CHECKPOINT_DIR = script_dir.parent / 'modeling' / 'checkpoints'
 OUTPUT_DIR     = script_dir.parent / 'evaluation_task2'
 SOUNDFONT_PATHS = [
+    str(CHECKPOINT_DIR / 'MuseScore_General.sf3'),
     '/opt/homebrew/share/soundfonts/default.sf2',
     os.path.expanduser('~/Library/Audio/Sounds/Banks/FluidR3_GM.sf2'),
-    str(CHECKPOINT_DIR / 'MuseScore_General.sf3'),
 ]
 VOICE_NAMES       = ['Soprano', 'Alto', 'Tenor', 'Bass']
 PIANO_INSTRUMENTS = [m21instr.Piano]*4
@@ -262,24 +262,18 @@ def tokens_to_midi(token_ids, tokenizer, output_path, instruments):
 
 
 def midi_to_wav(midi_path, wav_path, soundfont):
+    import shutil
+    fs_bin = shutil.which('fluidsynth') or '/usr/local/bin/fluidsynth'
     try:
-        import pretty_midi, soundfile as sf
-        pm    = pretty_midi.PrettyMIDI(str(midi_path))
-        audio = pm.fluidsynth(fs=44100, sf2_path=soundfont)
-        sf.write(str(wav_path), audio, 44100)
-        print(f'    -> {wav_path.name}')
-        return True
-    except Exception: pass
-    try:
-        fs = subprocess.run(['which', 'fluidsynth'], capture_output=True, text=True).stdout.strip()
-        if fs:
-            subprocess.run([fs, '-ni', soundfont, str(midi_path), '-F', str(wav_path), '-r', '44100'],
-                           capture_output=True, timeout=30)
-            if os.path.exists(wav_path) and os.path.getsize(wav_path) > 0:
-                print(f'    -> {wav_path.name}')
-                return True
-    except Exception: pass
-    print('    WAV skipped (no soundfont/fluidsynth)')
+        subprocess.run(
+            [fs_bin, '-ni', '-F', str(wav_path), '-r', '44100', soundfont, str(midi_path)],
+            capture_output=True, timeout=180)
+        if os.path.exists(wav_path) and os.path.getsize(wav_path) > 1000:
+            print(f'    -> {wav_path.name}')
+            return True
+    except Exception as e:
+        pass
+    print('    WAV skipped (fluidsynth failed)')
     return False
 
 

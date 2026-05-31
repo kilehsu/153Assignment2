@@ -242,7 +242,7 @@ class POP909Dataset(Dataset):
 
 if __name__ == '__main__':
     # Test the dataset
-    data_dir = '/Users/kilehsu/153Assignment2/data/POP909/POP909'
+    data_dir = 'data/POP909/POP909'
 
     print("Building POP909 dataset...")
     train_ds = POP909Dataset(data_dir, split='train', val_ratio=0.1)

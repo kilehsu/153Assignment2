@@ -21,7 +21,7 @@ import soundfile as sf
 from pathlib import Path
 
 # --- paths ---------------------------------------------------------------
-BASE = Path('/Users/kilehsu/153Assignment2')
+BASE = Path(__file__).resolve().parent.parent
 DATA_DIR   = BASE / 'data' / 'POP909' / 'POP909'
 CKPT       = BASE / 'modeling_task2' / 'harmonizer_best.pt'
 OUT_DIR    = BASE / 'evaluation_task2'
@@ -137,16 +137,29 @@ def generate_midi_for_song(song_id, model):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def midi_to_wav(midi_path, wav_path):
-    """Render MIDI → WAV using pretty_midi + fluidsynth."""
+    """Render MIDI → WAV via the fluidsynth CLI.
+
+    We deliberately shell out to the binary instead of pretty_midi.fluidsynth()/
+    pyfluidsynth: on this machine the installed libfluidsynth is x86_64 while Python
+    is arm64, so pyfluidsynth fails to dlopen the library. The CLI binary runs fine
+    (under Rosetta) and the '-a file' driver renders to disk without using the speakers.
+    """
+    import shutil
     if Path(wav_path).exists() and Path(wav_path).stat().st_size > 10_000:
         print(f"    WAV exists, skipping: {Path(wav_path).name}")
         return True
+    fs_bin = shutil.which('fluidsynth') or '/usr/local/bin/fluidsynth'
+    # '-F <out>' before the inputs = offline fast render, audio driver disabled (silent).
     try:
-        pm   = pretty_midi.PrettyMIDI(str(midi_path))
-        audio = pm.fluidsynth(fs=44100, sf2_path=str(SOUNDFONT))
-        sf.write(str(wav_path), audio, 44100)
-        print(f"    WAV  saved: {Path(wav_path).name}  ({Path(wav_path).stat().st_size//1024} KB)")
-        return True
+        subprocess.run(
+            [fs_bin, '-ni', '-F', str(wav_path), '-r', '44100',
+             str(SOUNDFONT), str(midi_path)],
+            capture_output=True, timeout=180)
+        if Path(wav_path).exists() and Path(wav_path).stat().st_size > 1000:
+            print(f"    WAV  saved: {Path(wav_path).name}  ({Path(wav_path).stat().st_size//1024} KB)")
+            return True
+        print(f"    WAV failed for {midi_path}: no output produced")
+        return False
     except Exception as e:
         print(f"    WAV failed for {midi_path}: {e}")
         return False

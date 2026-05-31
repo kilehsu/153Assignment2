@@ -1,8 +1,8 @@
 {
   "Our Model": {
-    "Scale Consistency (%)": 61.52,
+    "Scale Consistency (%)": 57.16,
     "Note Density Ratio": 0.247,
-    "Pitch Range Coverage (%)": 91.1
+    "Pitch Range Coverage (%)": 95.35
   },
   "Random Baseline": {
     "Scale Consistency (%)": 100.0,

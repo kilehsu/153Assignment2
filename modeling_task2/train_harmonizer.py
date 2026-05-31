@@ -96,11 +96,19 @@ def main():
     dropout = 0.3
     batch_size = 64
     lr = 1e-3
-    epochs = 30
+    epochs = 15  # val loss historically bottoms ~epoch 6; 15 gives margin and saves CPU hours
     seed = 42
 
-    # Device
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    # Device: CUDA if present, else CPU. MPS is intentionally skipped — for this
+    # small per-timestep LSTM decoder the GPU gives no speedup over CPU (kernel-launch
+    # overhead dominates the 64-step Python loop). Set HARMONIZER_DEVICE to override.
+    forced = os.environ.get('HARMONIZER_DEVICE')
+    if forced:
+        device = torch.device(forced)
+    elif torch.cuda.is_available():
+        device = torch.device('cuda')
+    else:
+        device = torch.device('cpu')
     print(f"Using device: {device}")
 
     # Set seed
@@ -108,7 +116,7 @@ def main():
 
     # Data
     print("Loading datasets...")
-    data_dir = '/Users/kilehsu/153Assignment2/data/POP909/POP909'
+    data_dir = 'data/POP909/POP909'
     train_ds = POP909Dataset(data_dir, split='train', val_ratio=0.1, seed=seed)
     val_ds = POP909Dataset(data_dir, split='val', val_ratio=0.1, seed=seed)
 
@@ -124,7 +132,7 @@ def main():
 
     # Optimizer
     optimizer = Adam(model.parameters(), lr=lr)
-    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=3, verbose=True)
+    scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=3)
 
     # Training loop
     losses = {'train': [], 'val': []}
